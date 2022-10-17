@@ -7,7 +7,7 @@ import api from '../../services/api';
 
 export default function Main() {
 
-  const initialRepositories = JSON.parse(window.localStorage.getItem('repos'))
+  const initialRepositories = JSON.parse(window.localStorage.getItem('repos')) || []
   const [newRepo, setNewRepo] = useState('');
   const [repositories, setRepositories] = useState(initialRepositories);
   const [loading, setLoading] = useState(false);
@@ -42,7 +42,7 @@ export default function Main() {
 
         const response = await api.get(`repos/${newRepo}`);
 
-        const hasRepo = repositories.find(repo => repo.name === newRepo);
+        const hasRepo = repositories && repositories.find(repo => repo.name === newRepo);
 
         if (hasRepo) {
           throw new Error('Repositorio Duplicado');
@@ -105,7 +105,7 @@ export default function Main() {
       </Form>
 
       <List>
-        {repositories.map(repo => (
+        {repositories && repositories.map(repo => (
           <li key={repo.name}>
             <span>
               <DeleteButton onClick={() => handleDelete(repo.name)}>
